@@ -1,0 +1,444 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Random;
+
+ class Game{
+    private String name;
+    private String category;
+    private int price;
+    private int quality;
+    //constructor
+    public Game(String name, String category, int price, int quantity){
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.quality = quantity;
+    }
+    //getters y setters
+    public String getName(){return name;}
+    public String getCategory(){return category;}
+    public int getPrice(){return price;}
+    public int getQuality(){return quality;}
+    public void setName(String name){this.name = name;}
+    public void setCategory(String category){this.category = category;}
+    public void setPrice(int price){this.price = price;}
+    public void setQuality(int quantity){this.quality = quantity;}
+
+}
+
+ class Dataset{
+    ArrayList<Game> data;
+    String sortedByAttribute;
+
+    public Dataset(ArrayList<Game> data){
+        this.data = data;
+        sortedByAttribute = "";
+    }
+
+    public Boolean ordenado(ArrayList<Game> n){
+        for(int i=0;i<n.size()-1;i++){
+            if(n.get(i).getPrice() > n.get(i+1).getPrice()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public ArrayList<Game> getGamesPrice(int price){
+        long startTime = System.nanoTime();
+        ArrayList<Game> lista = new ArrayList<>();
+        if(ordenado(data)==true){
+                int left=0;
+                int right=data.size()-1;
+                int desde=-1;
+                while(left<=right){
+                int mid = left + (right - left) / 2;
+                int midPrice = data.get(mid).getPrice();
+                if(price==midPrice) {
+                    desde=mid;
+                    break;
+                }else if(price<midPrice) {
+                    right = mid - 1;
+                } else if (price>midPrice) {
+                    left=mid+1;
+                }
+            }
+        if(desde!=  -1){
+            int i=desde;
+            while(i>=0 && data.get(i).getPrice()==price){
+                lista.add(data.get(i));
+                i--;
+            }
+            i=desde+1;
+            while(i<data.size() && data.get(i).getPrice()==price){
+                lista.add(data.get(i));
+                i++;
+            }
+        }
+        }else{
+        //lineal (for)
+                for(int i=0;i<data.size();i++){
+                    if (data.get(i).getPrice() == price) {
+                        lista.add(data.get(i));
+                    }
+            }
+        }
+        long endTime = System.nanoTime();
+        long  totalTime = (endTime-startTime)/1_000_000;
+        System.out.println("Total de tiempo: "+totalTime+" mm");
+        return lista;
+    }
+
+    public ArrayList<Game> getGamesByPriceRange(int lowePrice,  int higherPrice){
+        long startTime = System.nanoTime();
+        ArrayList<Game> lista = new ArrayList<>();
+        if(ordenado(data)==true){
+            int left=0;
+            int right=data.size()-1;
+            int desde=-1;
+
+            while(left<=right){
+                int mid  = left + (right - left) / 2;
+                int midPrice = data.get(mid).getPrice();
+
+                if(midPrice>= lowePrice){
+                        desde=mid;
+                        right=mid-1;
+                }else{
+                    left=mid+1;
+            }
+        }
+            if(desde!= -1){
+                for(int i=desde; i<data.size()-1;i++){
+                    int price = data.get(i).getPrice();
+                        if(price<higherPrice){
+                            lista.add(data.get(i));
+                        }else{
+                            break;
+                        }
+                }
+            }
+        }else{
+            //lineal
+            for(Game copia: data){
+                int price=copia.getPrice();
+                if(price>=lowePrice && price<=higherPrice){
+                    lista.add(copia);
+                }
+            }
+        }
+        long endTime = System.nanoTime();
+        long  totalTime = (endTime-startTime)/1_000_000;
+        System.out.println("Total de tiempo: "+totalTime+" mm");
+        return lista;
+    }
+
+    public boolean ordenadoCategoria(ArrayList<Game> n){
+        for(int i=0;i<n.size()-1;i++){
+            if(n.get(i).getCategory().compareTo(n.get(i+1).getCategory()) > 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
+//arreglar
+    public ArrayList<Game> getGamesByCategory(String category){
+        long startTime = System.nanoTime();
+        ArrayList<Game> lista = new ArrayList<>();
+        if(ordenadoCategoria(data)==true){
+            int left=0;
+            int right=data.size()-1;
+            int desde=-1;
+
+            while(left<=right){
+                int mid  = left + (right - left) / 2;
+                String midCategory=data.get(mid).getCategory();
+                int comparador =  midCategory.compareTo(category);
+
+                if(comparador==0){
+                    desde=mid;
+                    break;
+                }else if(comparador<0){
+                    right=mid-1;
+                }else if(comparador>0){
+                    left=mid+1;
+                }
+            }
+
+            if(desde!=-1){
+
+                int i=desde;
+                while(i>=0 && data.get(i).getCategory().equals(category)){
+                    lista.add(data.get(i));
+                    i--;
+                }
+
+                i=desde+1;
+                while(i<data.size() && data.get(i).getCategory().equals(category)){
+                    lista.add(data.get(i));
+                    i++;
+                }
+            }
+        }else{
+                for(Game copia: data){
+                    if(copia.getCategory().equals(category)){
+                        lista.add(copia);
+                    }
+                }
+        }
+        long endTime = System.nanoTime();
+        long  totalTime = (endTime-startTime)/1_000_000;
+        System.out.println("Total de tiempo: "+totalTime+" mm");
+        return lista;
+    }
+//arreglar
+
+    public boolean ordenadoCalidad(ArrayList<Game> n){
+        for(int i=0;i<n.size()-1;i++){
+            if(n.get(i).getQuality()>n.get(i+1).getQuality()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public  ArrayList<Game> getGamesByQuality(int quality){
+        long startTime = System.nanoTime();
+        ArrayList<Game> lista = new ArrayList<>();
+        if(ordenadoCalidad(data)==true){
+            int  left=0;
+            int right=data.size()-1;
+            int desde=-1;
+            while(left<=right){
+                int mid  = left + (right - left) / 2;
+                int midcalidad = data.get(mid).getQuality();
+
+                if(midcalidad==quality){
+                    desde=mid;
+                    break;
+                }else if(midcalidad<quality){
+                    left =mid+1;
+                }else if(midcalidad>quality){
+                    right=mid-1;
+                }
+            }
+
+            if(desde!=-1){
+                int i=desde;
+                while(i>=0 && data.get(i).getQuality()==quality){
+                    lista.add(data.get(i));
+                    i--;
+                }
+                i=desde+1;
+                while(i<data.size() && data.get(i).getQuality()==quality){
+                    lista.add(data.get(i));
+                    i++;
+                }
+            }
+        }else{
+            for(Game copia: data){
+                if(copia.getQuality()==quality){
+                    lista.add(copia);
+                }
+            }
+        }
+        long endTime = System.nanoTime();
+        long  totalTime = (endTime-startTime)/1_000_000;
+        System.out.println("Total de tiempo: "+totalTime+" mm");
+        return lista;
+    }
+//metodos de ordenamiento
+
+
+    public void bubbleSort(ArrayList<Game> lista, Comparator<Game> comparador){
+        int tamanio=lista.size();
+        for(int i=0;i<tamanio-1;i++){//se hacen dos for para confirmar que este ordenado
+            for(int j=0;j<tamanio-i-1;j++){
+                if(comparador.compare(lista.get(j),lista.get(j+1))>0){
+                    Game temp =lista.get(j);//se guarda el contenido de la posición j
+                    lista.set(j,lista.get(j+1));//en la posicion j, se guarda el contenido de la posicion de adelante (j+1)
+                    lista.set(j+1,temp);//en la posicion j+1, se guarda el que estaba en j
+                }
+            }
+        }
+    }
+
+    public void insertionSort(ArrayList<Game> lista, Comparator<Game> comparador){
+        for(int i=1; i<lista.size();i++){
+            Game elm=lista.get(i);
+            int j =i-1;
+
+            while(j>=0 && comparador.compare(lista.get(j),elm) > 0 ){
+                lista.set(j+1,lista.get(j));
+                j--;
+            }
+            lista.set(j+1,elm);
+        }
+    }
+
+    public void selectionSort(ArrayList<Game> lista, Comparator<Game> comparador){
+        int tamanio=lista.size();
+
+        for(int i=0; i<tamanio-1;i++){
+            int auxilar=i;
+            for(int j=i+1;j<tamanio;j++){
+                if(comparador.compare(lista.get(j),lista.get(auxilar))<0){
+                    auxilar=j;
+                }
+            }
+            if(auxilar!=i){
+                Game temp =lista.get(i);
+                lista.set(i,lista.get(auxilar));
+                lista.set(auxilar,temp);
+            }
+        }
+    }
+
+    public void mergeSort(ArrayList<Game> lista, Comparator<Game> comparador){
+        if(lista.size()<=1)return;
+        int medio =lista.size()/2;
+        ArrayList<Game> left=new ArrayList<>(lista.subList(0,medio));
+        ArrayList<Game> right=new ArrayList<>(lista.subList(medio,lista.size()));
+        mergeSort(left,comparador);
+        mergeSort(right,comparador);
+        merge(lista,left,right,comparador);
+    }
+        private void merge(ArrayList<Game> lista, ArrayList<Game> left,ArrayList<Game> right,Comparator<Game> comparador){
+        int i=0;
+        int j=0;
+        int k=0;
+
+            while(i<left.size() && j<right.size()){
+                if(comparador.compare(left.get(i),right.get(j))<=0){
+                    lista.set(k++,left.get(i++));
+                }else{
+                    lista.set(k++,right.get(j++));
+                }
+            }
+            while(i<left.size()){
+                lista.set(k++,left.get(i++));
+            }
+            while(j<right.size()){
+                lista.set(k++,right.get(j++));
+            }
+        }
+
+        public void quickSort(ArrayList<Game> lista, Comparator<Game> comparador){
+            ordenador(lista,0,lista.size()-1,comparador);
+        }
+
+                private void ordenador(ArrayList<Game> lista, int low, int high, Comparator<Game> comparador){
+                if(low<high){
+                    int pivote = divisor(lista,low,high,comparador);
+                    ordenador(lista,low,pivote-1,comparador);
+                    ordenador(lista,pivote+1,high,comparador);
+                    }
+                }
+
+                private int divisor(ArrayList<Game> lista, int low, int high, Comparator<Game> comparador){
+                    Game pivote = lista.get(high);
+                    int i =low-1;
+                    for(int j=low;j<high;j++){
+                        if(comparador.compare(lista.get(j), pivote) <= 0){
+                            i++;
+                            Game temp=lista.get(i);
+                            lista.set(i,lista.get(j));
+                            lista.set(j,temp);
+                        }
+                    }
+                    Game temp=lista.get(i+1);
+                    lista.set(i+1,lista.get(high));
+                    lista.set(high,temp);
+                    return i+1;
+                }
+
+    public void sortByAlgorithm(String algorithm, String attribute){
+        Comparator<Game> comparador = (antes, despues) -> Integer.compare(antes.getPrice(), despues.getPrice());
+        sortedByAttribute = "price";
+
+        if(attribute.equals("category")){
+            comparador = (antes, despues) -> antes.getCategory().compareTo(despues.getCategory());
+            sortedByAttribute="category";
+        }else if(attribute.equals("price")){
+            comparador = (antes, despues) -> Integer.compare(antes.getPrice(), despues.getPrice());
+            sortedByAttribute="price";
+        }else if(attribute.equals("quality")){
+            comparador = (antes, despues) -> Integer.compare(antes.getQuality(), despues.getQuality());
+            sortedByAttribute = "quality";
+        }else if(!attribute.equals("quality") && !attribute.equals("category")  && !attribute.equals("price")){
+            comparador = (antes, despues) -> Integer.compare(antes.getPrice(), despues.getPrice());
+            sortedByAttribute="price";
+        }
+
+        long startTime = System.nanoTime();
+
+        if(algorithm.equals("bubbleSort")){
+            bubbleSort(data, comparador);
+        }else if(algorithm.equals("insertionSort")){
+            insertionSort(data, comparador);
+        }else if(algorithm.equals("quickSort")){
+            quickSort(data, comparador);
+        }else if(algorithm.equals("selectionSort")){
+            selectionSort(data, comparador);
+        }else if(algorithm.equals("mergeSort")){
+            mergeSort(data, comparador);
+        }else{
+            bubbleSort(data, comparador);
+        }
+
+        long endTime = System.nanoTime();
+        long duracion=(endTime-startTime)/1_000_000;
+        System.out.println("Tiempo de ejecución de "+algorithm+":  "+duracion+" milisegundos");
+
+    }
+
+}
+
+ class GenerateData{
+    static String[] palabras = {"Dragon", "Empire", "Quest", "Galaxy", "Legends", "Warrior", "Battle", "Shadow", "Chronicles", "Mystic"};
+    static String[] categoria = {"Acción", "Aventura", "Estrategia", "RPG", "Deportes", "Simulación"};
+    static Random random = new Random();
+
+    public static ArrayList<Game> generarGames(int cantidad){
+        ArrayList<Game> games = new ArrayList<>();
+
+        for(int i=0;i<cantidad;i++){
+            String name = palabras[random.nextInt(palabras.length)]+palabras[random.nextInt(palabras.length)];
+            String category = categoria[random.nextInt(categoria.length)];
+            int price = random.nextInt(70001);
+            int quality = random.nextInt(101);
+            games.add(new Game(name,category,price,quality));
+        }
+        return games;
+    }
+
+    public static void generarEnArchivo(ArrayList<Game> games,  String nombre){
+        try(FileWriter archivo = new FileWriter("juegos.csv")){
+            archivo.write("Name,category,price,quality\n");
+            for(Game juego : games){
+                archivo.write(juego.getName() + "," + juego.getCategory() + "," + juego.getPrice() + "," + juego.getQuality() + "\n");
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+}
+
+public class Main{
+    public static void main(String[] args){
+        ArrayList<Game> games = GenerateData.generarGames(100);
+        GenerateData.generarEnArchivo(games,"juegos.csv");
+
+        ArrayList<Game> games1 = GenerateData.generarGames(10000);
+        GenerateData.generarEnArchivo(games1,"juegos1.csv");
+
+        ArrayList<Game> games2 = GenerateData.generarGames(1000000);
+        GenerateData.generarEnArchivo(games2,"juegos2.csv");
+        
+        Dataset dataset = new Dataset(games100);
+
+    }
+}
