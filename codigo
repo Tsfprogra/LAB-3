@@ -1,6 +1,7 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 
@@ -41,6 +42,7 @@ import java.util.Random;
         long startTime = System.nanoTime();
         ArrayList<Game> lista = new ArrayList<>();
         if(sortedByAttribute.equals("price")){
+            System.out.println("Busquedad Binaria");
                 int left=0;
                 int right=data.size()-1;
                 int desde=-1;
@@ -56,6 +58,7 @@ import java.util.Random;
                     left=mid+1;
                 }
             }
+
         if(desde!=  -1){
             int i=desde;
             while(i>=0 && data.get(i).getPrice()==price){
@@ -68,12 +71,13 @@ import java.util.Random;
                 i++;
             }
         }
+
         }else{
-        //lineal (for)
-                for(int i=0;i<data.size();i++){
-                    if (data.get(i).getPrice() == price) {
-                        lista.add(data.get(i));
-                    }
+            System.out.println("Busquedad lineal");
+            for (Game datum : data) {
+                if (datum.getPrice() == price) {
+                    lista.add(datum);
+                }
             }
         }
         long endTime = System.nanoTime();
@@ -86,6 +90,7 @@ import java.util.Random;
         long startTime = System.nanoTime();
         ArrayList<Game> lista = new ArrayList<>();
         if(sortedByAttribute.equals("price")){
+            System.out.println("Busquedad binaria");
             int left=0;
             int right=data.size()-1;
             int desde=-1;
@@ -112,7 +117,7 @@ import java.util.Random;
                 }
             }
         }else{
-            //lineal
+            System.out.println("Busquedad Lineal");
             for(Game copia: data){
                 int price=copia.getPrice();
                 if(price>=lowePrice && price<=higherPrice){
@@ -130,6 +135,7 @@ import java.util.Random;
         long startTime = System.nanoTime();
         ArrayList<Game> lista = new ArrayList<>();
         if(sortedByAttribute.equals("category")){
+            System.out.println("Busquedad Binaria");
             int left=0;
             int right=data.size()-1;
             int desde=-1;
@@ -164,6 +170,7 @@ import java.util.Random;
                 }
             }
         }else{
+            System.out.println("Busquedad Lineal");
                 for(Game copia: data){
                     if(copia.getCategory().equals(category)){
                         lista.add(copia);
@@ -180,6 +187,7 @@ import java.util.Random;
         long startTime = System.nanoTime();
         ArrayList<Game> lista = new ArrayList<>();
         if(sortedByAttribute.equals("quality")){
+            System.out.println("Busquedad binaria");
             int  left=0;
             int right=data.size()-1;
             int desde=-1;
@@ -210,6 +218,7 @@ import java.util.Random;
                 }
             }
         }else{
+            System.out.println("Busquedad lineal");
             for(Game copia: data){
                 if(copia.getQuality()==quality){
                     lista.add(copia);
@@ -359,12 +368,18 @@ import java.util.Random;
         }else if(algorithm.equals("mergeSort")){
             mergeSort(data, comparador);
         }else{
-            data.sort(comparador);
+            Collections.sort(data, comparador);
         }
 
         long endTime = System.nanoTime();
         long duracion=(endTime-startTime)/1_000_000;
         System.out.println("Tiempo de ejecución de "+algorithm+":  "+duracion+" milisegundos");
+
+    }
+
+    public void coutingSortByQuality(){
+        if(data.isEmpty())return;
+
 
     }
 
@@ -411,9 +426,15 @@ public class Main{
         ArrayList<Game> games1000000 = GenerateData.generarGames(1000000);
         GenerateData.generarEnArchivo(games1000000,"juegos1_000_000.csv");
 
-        Dataset dataset = new Dataset(games10000);
-        dataset.sortByAlgorithm("mergeSort","price");
+        //medicion de tiempo ORDENAMIENTO
+        Dataset dataset100 = new Dataset(games100);
+        dataset100.sortByAlgorithm("another","quality");
+        Dataset dataset10000 = new Dataset(games10000);
+        dataset10000.sortByAlgorithm("another","quality");
+        Dataset dataset1000000 = new Dataset(games1000000);
+        dataset1000000.sortByAlgorithm("another","quality");
 
+        
 
     }
 }
