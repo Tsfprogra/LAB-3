@@ -427,14 +427,14 @@ public class Main{
         GenerateData.generarEnArchivo(games1000000,"juegos1_000_000.csv");
 
         //medicion de tiempo ORDENAMIENTO
-        /*Dataset dataset100 = new Dataset(games100);
-        dataset100.sortByAlgorithm("another","quality");
+        Dataset dataset100 = new Dataset(games100);
+        dataset100.sortByAlgorithm("quickSort ","quality");
         Dataset dataset10000 = new Dataset(games10000);
-        dataset10000.sortByAlgorithm("another","quality");
+        dataset10000.sortByAlgorithm("quickSort ","quality");
         Dataset dataset1000000 = new Dataset(games1000000);
-        dataset1000000.sortByAlgorithm("another","price");
-        */
+        dataset1000000.sortByAlgorithm("quickSort ","quality");
 
+        /*
         //Medicion de tiempo Busquedad (ocupar games1000000->10^6)
         System.out.println("BUSQUEDAD BINARIA TIEMPOS");
         Dataset dataset1000000 = new Dataset(games1000000);
@@ -455,6 +455,7 @@ public class Main{
         dataset1000000.getGamesByQuality(75);
 
         //BUSQUEDAD LINEAL
+        Dataset dataset1000000 = new Dataset(games1000000);
         System.out.println("");
         System.out.println("BUSQUEDAD LINEAL TIEMPOS:");
         System.out.println("");
@@ -471,8 +472,7 @@ public class Main{
         dataset1000000.getGamesByCategory("RPG");
         System.out.println("");
 
-
-
+        */
 
     }
 }
