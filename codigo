@@ -37,19 +37,10 @@ import java.util.Random;
         sortedByAttribute = "";
     }
 
-    public Boolean ordenado(ArrayList<Game> n){
-        for(int i=0;i<n.size()-1;i++){
-            if(n.get(i).getPrice() > n.get(i+1).getPrice()){
-                return false;
-            }
-        }
-        return true;
-    }
-
     public ArrayList<Game> getGamesPrice(int price){
         long startTime = System.nanoTime();
         ArrayList<Game> lista = new ArrayList<>();
-        if(ordenado(data)==true){
+        if(sortedByAttribute.equals("price")){
                 int left=0;
                 int right=data.size()-1;
                 int desde=-1;
@@ -94,7 +85,7 @@ import java.util.Random;
     public ArrayList<Game> getGamesByPriceRange(int lowePrice,  int higherPrice){
         long startTime = System.nanoTime();
         ArrayList<Game> lista = new ArrayList<>();
-        if(ordenado(data)==true){
+        if(sortedByAttribute.equals("price")){
             int left=0;
             int right=data.size()-1;
             int desde=-1;
@@ -135,20 +126,10 @@ import java.util.Random;
         return lista;
     }
 
-    public boolean ordenadoCategoria(ArrayList<Game> n){
-        for(int i=0;i<n.size()-1;i++){
-            if(n.get(i).getCategory().compareTo(n.get(i+1).getCategory()) > 0){
-                return false;
-            }
-        }
-        return true;
-    }
-
-//arreglar
     public ArrayList<Game> getGamesByCategory(String category){
         long startTime = System.nanoTime();
         ArrayList<Game> lista = new ArrayList<>();
-        if(ordenadoCategoria(data)==true){
+        if(sortedByAttribute.equals("category")){
             int left=0;
             int right=data.size()-1;
             int desde=-1;
@@ -194,21 +175,11 @@ import java.util.Random;
         System.out.println("Total de tiempo: "+totalTime+" mm");
         return lista;
     }
-//arreglar
-
-    public boolean ordenadoCalidad(ArrayList<Game> n){
-        for(int i=0;i<n.size()-1;i++){
-            if(n.get(i).getQuality()>n.get(i+1).getQuality()){
-                return false;
-            }
-        }
-        return true;
-    }
 
     public  ArrayList<Game> getGamesByQuality(int quality){
         long startTime = System.nanoTime();
         ArrayList<Game> lista = new ArrayList<>();
-        if(ordenadoCalidad(data)==true){
+        if(sortedByAttribute.equals("quality")){
             int  left=0;
             int right=data.size()-1;
             int desde=-1;
@@ -250,6 +221,8 @@ import java.util.Random;
         System.out.println("Total de tiempo: "+totalTime+" mm");
         return lista;
     }
+
+
 //metodos de ordenamiento
 
 
@@ -386,7 +359,7 @@ import java.util.Random;
         }else if(algorithm.equals("mergeSort")){
             mergeSort(data, comparador);
         }else{
-            bubbleSort(data, comparador);
+            data.sort(comparador);
         }
 
         long endTime = System.nanoTime();
@@ -416,7 +389,7 @@ import java.util.Random;
     }
 
     public static void generarEnArchivo(ArrayList<Game> games,  String nombre){
-        try(FileWriter archivo = new FileWriter("juegos.csv")){
+        try(FileWriter archivo = new FileWriter(nombre)){
             archivo.write("Name,category,price,quality\n");
             for(Game juego : games){
                 archivo.write(juego.getName() + "," + juego.getCategory() + "," + juego.getPrice() + "," + juego.getQuality() + "\n");
@@ -429,16 +402,18 @@ import java.util.Random;
 
 public class Main{
     public static void main(String[] args){
-        ArrayList<Game> games = GenerateData.generarGames(100);
-        GenerateData.generarEnArchivo(games,"juegos.csv");
+        ArrayList<Game> games100 = GenerateData.generarGames(100);
+        GenerateData.generarEnArchivo(games100,"juegos100.csv");
 
-        ArrayList<Game> games1 = GenerateData.generarGames(10000);
-        GenerateData.generarEnArchivo(games1,"juegos1.csv");
+        ArrayList<Game> games10000 = GenerateData.generarGames(10000);
+        GenerateData.generarEnArchivo(games10000,"juegos10_000.csv");
 
-        ArrayList<Game> games2 = GenerateData.generarGames(1000000);
-        GenerateData.generarEnArchivo(games2,"juegos2.csv");
-        
-        Dataset dataset = new Dataset(games100);
+        ArrayList<Game> games1000000 = GenerateData.generarGames(1000000);
+        GenerateData.generarEnArchivo(games1000000,"juegos1_000_000.csv");
+
+        Dataset dataset = new Dataset(games10000);
+        dataset.sortByAlgorithm("mergeSort","price");
+
 
     }
 }
