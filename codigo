@@ -427,14 +427,52 @@ public class Main{
         GenerateData.generarEnArchivo(games1000000,"juegos1_000_000.csv");
 
         //medicion de tiempo ORDENAMIENTO
-        Dataset dataset100 = new Dataset(games100);
+        /*Dataset dataset100 = new Dataset(games100);
         dataset100.sortByAlgorithm("another","quality");
         Dataset dataset10000 = new Dataset(games10000);
         dataset10000.sortByAlgorithm("another","quality");
         Dataset dataset1000000 = new Dataset(games1000000);
-        dataset1000000.sortByAlgorithm("another","quality");
+        dataset1000000.sortByAlgorithm("another","price");
+        */
 
-        
+        //Medicion de tiempo Busquedad (ocupar games1000000->10^6)
+        System.out.println("BUSQUEDAD BINARIA TIEMPOS");
+        Dataset dataset1000000 = new Dataset(games1000000);
+        dataset1000000.sortByAlgorithm("mergeSort","price");
+        System.out.println("");
+        System.out.println("BUSQUEDAD BINARIA POR PRECIO");
+        dataset1000000.getGamesPrice(5000);
+        System.out.println("");
+        System.out.println("BUSQUEDAD BINARIA POR RANGO DE PRECIO");
+        dataset1000000.getGamesByPriceRange(20000,60000);
+        System.out.println("");
+        System.out.println("BUSQUEDAD BINARIA POR CATEGORIA");
+        dataset1000000.sortByAlgorithm("mergeSort","category");
+        dataset1000000.getGamesByCategory("RPG");
+        System.out.println("");
+        System.out.println("BUSQUEDAD BINARIA POR CALIDAD");
+        dataset1000000.sortByAlgorithm("mergeSort","quality");
+        dataset1000000.getGamesByQuality(75);
+
+        //BUSQUEDAD LINEAL
+        System.out.println("");
+        System.out.println("BUSQUEDAD LINEAL TIEMPOS:");
+        System.out.println("");
+        System.out.println("BUSQUEDAD POR PRECIO");
+        dataset1000000.getGamesPrice(50000);
+        System.out.println("");
+        System.out.println("BUSQUEDAD POR RANGO DE PRECIO");
+        dataset1000000.getGamesByPriceRange(50000,60000);
+        System.out.println("");
+        System.out.println("BUSQUEDAD POR CALIDAD");
+        dataset1000000.getGamesByQuality(50);
+        System.out.println("");
+        System.out.println("BUSQUEDAD POR CATEGORIA");
+        dataset1000000.getGamesByCategory("RPG");
+        System.out.println("");
+
+
+
 
     }
 }
