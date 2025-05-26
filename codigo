@@ -400,6 +400,17 @@ import java.util.Random;
          sortedByAttribute="quality";
      }
 
+   //codigo extra para comprobar que sirve el codigo:
+   public void mostrarTodosLosJuegos() {
+         System.out.println("Lista de todos los videojuegos:");
+         for (Game juego : data) {
+             System.out.println("Nombre: " + juego.getName()
+                     + ", Categoría: " + juego.getCategory()
+                     + ", Precio: " + juego.getPrice()
+                     + ", Calidad: " + juego.getQuality());
+         }
+     }
+
 }
 
  class GenerateData{
@@ -434,6 +445,7 @@ import java.util.Random;
 
 public class Main{
     public static void main(String[] args){
+
         ArrayList<Game> games100 = GenerateData.generarGames(100);
         GenerateData.generarEnArchivo(games100,"juegos100.csv");
 
@@ -443,7 +455,12 @@ public class Main{
         ArrayList<Game> games1000000 = GenerateData.generarGames(1000000);
         GenerateData.generarEnArchivo(games1000000,"juegos1_000_000.csv");
 
-
+        //Comprobar que funciona 
+        Dataset dataset100 = new Dataset(games100);
+        dataset100.mostrarTodosLosJuegos();
+        dataset100.sortByAlgorithm("insertionSort","category");
+        dataset100.mostrarTodosLosJuegos();
+        /*
         //medicion de tiempo ORDENAMIENTO
         Dataset dataset100 = new Dataset(games100);
         dataset100.sortByAlgorithm("insertionSort","category");
@@ -451,7 +468,7 @@ public class Main{
         dataset10000.sortByAlgorithm("insertionSort","category");
         Dataset dataset1000000 = new Dataset(games1000000);
         dataset1000000.sortByAlgorithm("insertionSort","category");
-
+        */
 
         /*
         //Medicion de tiempo Busquedad (ocupar games1000000->10^6)
@@ -490,8 +507,8 @@ public class Main{
         System.out.println("BUSQUEDAD POR CATEGORIA");
         dataset1000000.getGamesByCategory("RPG");
         System.out.println("");
-
         */
+
         /*
         // Counting Sort
         System.out.println("\n---- Counting Sort por Quality ----");
