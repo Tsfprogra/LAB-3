@@ -139,7 +139,6 @@ import java.util.Random;
             int left=0;
             int right=data.size()-1;
             int desde=-1;
-
             while(left<=right){
                 int mid  = left + (right - left) / 2;
                 String midCategory=data.get(mid).getCategory();
@@ -154,7 +153,6 @@ import java.util.Random;
                     left=mid+1;
                 }
             }
-
             if(desde!=-1){
 
                 int i=desde;
@@ -162,7 +160,6 @@ import java.util.Random;
                     lista.add(data.get(i));
                     i--;
                 }
-
                 i=desde+1;
                 while(i<data.size() && data.get(i).getCategory().equals(category)){
                     lista.add(data.get(i));
@@ -377,11 +374,31 @@ import java.util.Random;
 
     }
 
-    public void coutingSortByQuality(){
-        if(data.isEmpty())return;
+     public void coutingSortByQuality() {
+         if (data.isEmpty()) return;
 
+         long startTime = System.nanoTime();
 
-    }
+         ArrayList<ArrayList<Game>> ListaFrecuencias = new ArrayList<>(101);
+         for (int i = 0; i <= 100; i++) {
+             ListaFrecuencias.add(new ArrayList<>());
+         }
+
+         for (Game g : data) {
+             ListaFrecuencias.get(g.getQuality()).add(g);
+         }
+
+         data.clear();
+         for (int i = 0; i <= 100; i++) {
+             data.addAll(ListaFrecuencias.get(i));
+         }
+
+         long endTime = System.nanoTime();
+         long tiempoT = (endTime - startTime) / 1_000_000;
+         System.out.println("Tiempo de ejecución de Counting Sort por quality: " + tiempoT + " milisegundos");
+
+         sortedByAttribute="quality";
+     }
 
 }
 
@@ -426,13 +443,15 @@ public class Main{
         ArrayList<Game> games1000000 = GenerateData.generarGames(1000000);
         GenerateData.generarEnArchivo(games1000000,"juegos1_000_000.csv");
 
+
         //medicion de tiempo ORDENAMIENTO
         Dataset dataset100 = new Dataset(games100);
-        dataset100.sortByAlgorithm("quickSort ","quality");
+        dataset100.sortByAlgorithm("insertionSort","category");
         Dataset dataset10000 = new Dataset(games10000);
-        dataset10000.sortByAlgorithm("quickSort ","quality");
+        dataset10000.sortByAlgorithm("insertionSort","category");
         Dataset dataset1000000 = new Dataset(games1000000);
-        dataset1000000.sortByAlgorithm("quickSort ","quality");
+        dataset1000000.sortByAlgorithm("insertionSort","category");
+
 
         /*
         //Medicion de tiempo Busquedad (ocupar games1000000->10^6)
@@ -473,6 +492,17 @@ public class Main{
         System.out.println("");
 
         */
+        /*
+        // Counting Sort
+        System.out.println("\n---- Counting Sort por Quality ----");
+        Dataset dataset_100 = new Dataset(games100);
+        dataset_100.coutingSortByQuality();
 
+        Dataset dataset10000_CS = new Dataset(games10000);
+        dataset10000_CS.coutingSortByQuality();
+
+        Dataset dataset1000000_CS = new Dataset(games1000000);
+        dataset1000000_CS.coutingSortByQuality();
+        */
     }
 }
