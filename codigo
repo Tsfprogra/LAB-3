@@ -455,13 +455,13 @@ public class Main{
         ArrayList<Game> games1000000 = GenerateData.generarGames(1000000);
         GenerateData.generarEnArchivo(games1000000,"juegos1_000_000.csv");
 
-        //Comprobar que funciona 
+        //Comprobar que funciona imprimiento despues de ordenar
         Dataset dataset100 = new Dataset(games100);
         dataset100.mostrarTodosLosJuegos();
         dataset100.sortByAlgorithm("insertionSort","category");
         dataset100.mostrarTodosLosJuegos();
         /*
-        //medicion de tiempo ORDENAMIENTO
+        //medicion de tiempo ORDENAMIENTO 
         Dataset dataset100 = new Dataset(games100);
         dataset100.sortByAlgorithm("insertionSort","category");
         Dataset dataset10000 = new Dataset(games10000);
@@ -472,6 +472,7 @@ public class Main{
 
         /*
         //Medicion de tiempo Busquedad (ocupar games1000000->10^6)
+        
         System.out.println("BUSQUEDAD BINARIA TIEMPOS");
         Dataset dataset1000000 = new Dataset(games1000000);
         dataset1000000.sortByAlgorithm("mergeSort","price");
@@ -490,7 +491,7 @@ public class Main{
         dataset1000000.sortByAlgorithm("mergeSort","quality");
         dataset1000000.getGamesByQuality(75);
 
-        //BUSQUEDAD LINEAL
+        //BUSQUEDAD LINEAL Tiempos
         Dataset dataset1000000 = new Dataset(games1000000);
         System.out.println("");
         System.out.println("BUSQUEDAD LINEAL TIEMPOS:");
@@ -511,7 +512,7 @@ public class Main{
 
         /*
         // Counting Sort
-        System.out.println("\n---- Counting Sort por Quality ----");
+        System.out.println("\nCounting Sort por Quality");
         Dataset dataset_100 = new Dataset(games100);
         dataset_100.coutingSortByQuality();
 
